@@ -7,18 +7,52 @@
 </head>
 <body>
     <h1>GPS and Barometer Data</h1>
-    <button onclick="getLocation()">Get Location and Pressure</button>
+    <button onclick="handleClick()">Get Location and Pressure</button>
     <p id="location"></p>
     <p id="pressure"></p>
 
     <script>
-        function getLocation() {
+        function handleClick() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
                 document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
             }
+            showBarometerData();
         }
+
+        function showBarometerData() {
+            const pressureDiv = document.getElementById("pressure");
+            
+            if ('AbsoluteOrientationSensor' in window && 'Barometer' in window) {
+            // Request permissions for sensors if required
+            navigator.permissions.query({ name: 'accelerometer' }).then(function (result) {
+                if (result.state === 'denied') {
+                     pressureDiv.textContent = 'Permission to use accelerometer sensor is denied.';
+                    return;
+                }
+            });
+
+            // Initialize the Barometer sensor
+            const barometer = new Barometer({ frequency: 1 });
+
+            barometer.addEventListener('reading', () => {
+                pressureDiv.textContent = barometer.pressure.toFixed(2);
+            });
+
+            barometer.addEventListener('error', (event) => {
+                if (event.error.name === 'NotAllowedError') {
+                    pressureDiv.textContent = ('Permission to access sensor was denied.');
+                } else if (event.error.name === 'NotReadableError') {
+                    pressureDiv.textContent = ('Cannot connect to the sensor.');
+                }
+            });
+
+            barometer.start();
+        } else {
+            pressureDiv.textContent = 'Barometer sensor is not supported by your browser.';
+        }
+    }
 
         function showPosition(position) {
             console.log('showPositiona');
