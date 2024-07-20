@@ -21,6 +21,7 @@
         }
 
         function showPosition(position) {
+            try {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
             document.getElementById("location").innerHTML = `Latitude: ${lat} °, Longitude: ${lon} °`;
@@ -38,14 +39,21 @@
                 // Non-iOS 13+ device
                 window.addEventListener('deviceorientation', handleOrientation, true);
             }
+            } catch (e) {
+                alert(e);
+            }
         }
 
         function handleOrientation(event) {
+            try {
             let pressure = event.webkitCompassHeading; // This might not be available
             if (pressure !== undefined) {
                 document.getElementById("pressure").innerHTML = `Pressure: ${pressure} Pa`;
             } else {
                 document.getElementById("pressure").innerHTML = "Barometer data not available.";
+            }
+            } catch (e) {
+                alert(e);
             }
         }
 
