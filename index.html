@@ -8,8 +8,9 @@
 <body>
     <h1>GPS and Barometer Data</h1>
     <button onclick="handleClick()">Get Location and Pressure</button>
-    <p id="location"></p>
-    <p id="pressure"></p>
+    location: <p id="location"></p>
+    webkitCompassHeading: <p id="pressure"></p>
+    Barometer in window: <p id="barometer"></p>
 
     <script>
         function handleClick() {
@@ -22,7 +23,7 @@
         }
 
         function showBarometerData() {
-            const pressureDiv = document.getElementById("pressure");
+            const pressureDiv = document.getElementById("barometer");
             
             if ('Barometer' in window) {
             // Request permissions for sensors if required
