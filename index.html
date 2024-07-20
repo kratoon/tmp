@@ -21,6 +21,7 @@
         }
 
         function showPosition(position) {
+            console.log('showPositiona');
             try {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
@@ -30,34 +31,43 @@
                 // iOS 13+ device
                 DeviceOrientationEvent.requestPermission().then(permissionState => {
                     if (permissionState === 'granted') {
+                        console.log('granted');
                         window.addEventListener('deviceorientation', handleOrientation, true);
                     } else {
+                        console.log('not granted');
                         document.getElementById("pressure").innerHTML = "Permission to access device sensors was denied.";
                     }
                 }).catch(console.error);
             } else {
                 // Non-iOS 13+ device
+                console.log('Non-iOS 13+ device');
                 window.addEventListener('deviceorientation', handleOrientation, true);
             }
             } catch (e) {
+                console.error(e);
                 alert(e);
             }
         }
 
         function handleOrientation(event) {
+            console.log('handleOrientation');
             try {
             let pressure = event.webkitCompassHeading; // This might not be available
             if (pressure !== undefined) {
+                console.log('pressure');
                 document.getElementById("pressure").innerHTML = `Pressure: ${pressure} Pa`;
             } else {
+                console.log('no barometer data');
                 document.getElementById("pressure").innerHTML = "Barometer data not available.";
             }
             } catch (e) {
+                console.error(e);
                 alert(e);
             }
         }
 
         function showError(error) {
+            console.log('showError', error);
             switch(error.code) {
                 case error.PERMISSION_DENIED:
                     document.getElementById("location").innerHTML = "User denied the request for Geolocation.";
