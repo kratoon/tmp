@@ -18,11 +18,28 @@
 
     <script>
         function handleClick() {
-            if (navigator.geolocation) {
+                   if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" ) {
+        // (optional) Do something before API request prompt.
+        DeviceMotionEvent.requestPermission()
+            .then( response => {
+                        // (optional) Do something after API prompt dismissed.
+                        if ( response == "granted" ) {
+                            window.addEventListener( "devicemotion", (e) => {
+                if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
                 document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
             }
+                            })
+                        }
+                    })
+                        .catch( console.error )
+                } else {
+                    alert( "DeviceMotionEvent is not defined" );
+                }
+
+
+    
             showBarometerData();
         }
 
@@ -60,7 +77,7 @@
     }
 
         function showPosition(position) {
-            console.log('showPositiona');
+            console.log('showPosition');
             try {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
