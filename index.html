@@ -24,7 +24,7 @@
         function showBarometerData() {
             const pressureDiv = document.getElementById("pressure");
             
-            if ('AbsoluteOrientationSensor' in window && 'Barometer' in window) {
+            if ('Barometer' in window) {
             // Request permissions for sensors if required
             navigator.permissions.query({ name: 'accelerometer' }).then(function (result) {
                 if (result.state === 'denied') {
